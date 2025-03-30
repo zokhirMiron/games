@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamster Kombat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #000;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #333;
+            height: 60px;
+        }
+        
+        .header h1 {
+            font-size: 20px;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .header-icon {
+            cursor: pointer;
+            font-size: 20px;
+        }
+        
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            background-color: #111;
+            border-bottom: 1px solid #333;
+        }
+        
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .profile-avatar {
+            width: 30px;
+            height: 30px;
+            background-color: #222;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .bybit-tag {
+            background-color: #333;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            background: linear-gradient(to bottom, #111, #000);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            border: 1px solid #333;
+            border-top: none;
+        }
+        
+        .stat-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .tap-profit {
+            color: orange;
+        }
+        
+        .hourly-profit {
+            color: #4CAF50;
+        }
+        
+        .coins-amount {
+            color: white;
+        }
+        
+        .coin-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            gap: 10px;
+        }
+        
+        .coin-icon {
+            color: gold;
+            font-size: 30px;
+        }
+        
+        .coin-value {
+            font-size: 36px;
+            font-weight: bold;
+        }
+        
+        .level-indicator {
+            text-align: right;
+            color: #aaa;
+            margin-top: 5px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #333;
+            border-radius: 4px;
+            margin: 5px 0 15px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #4CAF50, #8e44ad);
+            width: 80%;
+        }
+        
+        .character-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            position: relative;
+        }
+        
+        .character-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background-color: #1a1a3a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        
+        .character-circle:active {
+            transform: scale(0.95);
+        }
+        
+        .character {
+            width: 140px;
+            height: 140px;
+        }
+        
+        .coin-animation {
+            position: absolute;
+            color: gold;
+            font-weight: bold;
+            animation: coinMove 1s ease-out;
+            opacity: 0;
+        }
+        
+        @keyframes coinMove {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-60px);
+                opacity: 0;
+            }
+        }
+        
+        .boost-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #111;
+            border-radius: 10px;
+            margin: 0 15px 15px;
+        }
+        
+        .boost-energy {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .energy-icon {
+            color: yellow;
+        }
+        
+        .boost-button {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background-color: #2c3e50;
+            padding: 5px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background-color: #111;
+            border-top: 1px solid #333;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .nav-item.active {
+            color: white;
+        }
+        
+        .nav-item:first-child {
+            color: white;
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .airdrop-icon {
+            position: relative;
+        }
+        
+        .airdrop-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 15px;
+            height: 15px;
+            background-color: orange;
+            border-radius: 50%;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-icon">✕</div>
+        <h1>Hamster Kombat</h1>
+        <div class="header-actions">
+            <div class="header-icon">⋮</div>
+        </div>
+    </div>
+    
+    <div class="profile-header">
+        <div class="profile-info">
+            <div class="profile-avatar">🐹</div>
+            <div>TY (CEO)</div>
+        </div>
+        <div class="bybit-tag">ᴮʸᴮᴵᵀ Bybit</div>
+    </div>
+    
+    <div class="stats-container">
+        <div class="stat-box">
+            <div class="tap-profit">Прибыль за тап</div>
+            <div>💰 <span id="tap-value">+14</span></div>
+        </div>
+        <div class="stat-box">
+            <div class="coins-amount">Монет для апа</div>
+            <div><span id="upgrade-cost">100M</span></div>
+        </div>
+        <div class="stat-box">
+            <div class="hourly-profit">Прибыль в час</div>
+            <div>💰 <span id="hourly-value">+395,46K</span></div>
+        </div>
+    </div>
+    
+    <div class="coin-display">
+        <div class="coin-icon">💰</div>
+        <div class="coin-value" id="coins">94 000 718</div>
+    </div>
+    
+    <div class="level-indicator">
+        <div>Master ></div>
+        <div>Level <span id="level">8</span>/9</div>
+    </div>
+    
+    <div class="progress-bar">
+        <div class="progress-fill"></div>
+    </div>
+    
+    <div class="character-container" id="click-area">
+        <div class="character-circle">
+            <img src="/api/placeholder/400/400" alt="Hamster Character" class="character" id="hamster-character">
+        </div>
+    </div>
+    
+    <div class="boost-info">
+        <div class="boost-energy">
+            <div class="energy-icon">⚡</div>
+            <div><span id="energy">632</span> / 7500</div>
+        </div>
+        <div class="boost-button">
+            <div>🚀</div>
+            <div>Boost</div>
+        </div>
+    </div>
+    
+    <div class="navigation">
+        <div class="nav-item active">
+            <div class="nav-icon">ᴮʸᴮᴵᵀ</div>
+            <div>Exchange</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">K</div>
+            <div>Mine</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">👥</div>
+            <div>Friends</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">💰</div>
+            <div>Earn</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon airdrop-icon">🏆<span class="airdrop-badge">1</span></div>
+            <div>Airdrop</div>
+        </div>
+    </div>
+
+    <script>
+        // Game variables
+        let coins = 94000718;
+        let tapValue = 14;
+        let hourlyValue = 395460;
+        let energy = 632;
+        let level = 8;
+        let character = 'hamster';
+        
+        // DOM elements
+        const coinsDisplay = document.getElementById('coins');
+        const tapValueDisplay = document.getElementById('tap-value');
+        const hourlyValueDisplay = document.getElementById('hourly-value');
+        const energyDisplay = document.getElementById('energy');
+        const levelDisplay = document.getElementById('level');
+        const clickArea = document.getElementById('click-area');
+        const hamsterCharacter = document.getElementById('hamster-character');
+        
+        // Format number with commas
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(2) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(2) + 'K';
+            }
+            return num.toString();
+        }
+        
+        // Update displays
+        function updateDisplays() {
+            coinsDisplay.textContent = formatNumber(coins);
+            tapValueDisplay.textContent = '+' + tapValue;
+            hourlyValueDisplay.textContent = '+' + formatNumber(hourlyValue);
+            energyDisplay.textContent = energy;
+            levelDisplay.textContent = level;
+        }
+        
+        // Add coin animations
+        function createCoinAnimation(x, y) {
+            const coin = document.createElement('div');
+            coin.classList.add('coin-animation');
+            coin.textContent = '+' + tapValue;
+            coin.style.left = x + 'px';
+            coin.style.top = y + 'px';
+            clickArea.appendChild(coin);
+            
+            setTimeout(() => {
+                coin.remove();
+            }, 1000);
+        }
+        
+        // Handle clicks on character
+        clickArea.addEventListener('click', function(e) {
+            // Add coins
+            coins += tapValue;
+            
+            // Create animation
+            createCoinAnimation(e.clientX, e.clientY);
+            
+            // Update energy
+            energy += 1;
+            if (energy > 7500) energy = 7500;
+            
+            // Update displays
+            updateDisplays();
+            
+            // Optional: character animation
+            hamsterCharacter.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                hamsterCharacter.style.transform = 'scale(1)';
+            }, 100);
+        });
+        
+        // Replace placeholder with hamster character
+        hamsterCharacter.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><rect width='200' height='200' fill='none'/><circle cx='100' cy='100' r='70' fill='%23D4A76A'/><circle cx='70' cy='80' r='10' fill='%23333'/><circle cx='130' cy='80' r='10' fill='%23333'/><ellipse cx='100' cy='110' rx='20' ry='15' fill='%23333'/><ellipse cx='100' cy='95' rx='25' ry='10' fill='%23D4A76A'/><circle cx='70' cy='80' r='3' fill='white'/><circle cx='130' cy='80' r='3' fill='white'/><ellipse cx='60' cy='40' rx='18' ry='15' fill='%23D4A76A' transform='rotate(-10,60,40)'/><ellipse cx='140' cy='40' rx='18' ry='15' fill='%23D4A76A' transform='rotate(10,140,40)'/><rect x='70' y='140' width='60' height='10' fill='%23222'/><rect x='80' y='150' width='40' height='20' fill='%23222'/><rect x='90' y='120' width='20' height='20' fill='white'/><circle cx='100' cy='125' r='2' fill='%23222'/><rect x='60' y='100' width='80' height='40' fill='%23333'/><rect x='70' y='100' width='60' height='20' fill='black'/><rect x='60' y='105' width='5' height='5' fill='white' rx='2'/><rect x='135' y='105' width='5' height='5' fill='white' rx='2'/></svg>";
+        
+        // Add hourly income automatically
+        setInterval(() => {
+            coins += Math.floor(hourlyValue / 3600);
+            updateDisplays();
+        }, 1000);
+        
+        // Initialize game
+        updateDisplays();
+    </script>
+</body>
+</html>
